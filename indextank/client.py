@@ -1,10 +1,10 @@
 
 import anyjson
-import httplib
-import urllib
-import urlparse
 import base64
 import datetime
+from http.client import HTTPConnection
+from urllib.parse import urlparse, quote, urlsplit, urlunsplit
+
 
 from .version import VERSION
 __USER_AGENT = 'IndexTank-Python/' + VERSION
@@ -43,7 +43,7 @@ class ApiClient(object):
     
     """ Api urls """
     def __indexes_url(self):      return '%s/%s/indexes' % (self.__api_url, 'v1')
-    def __index_url(self, name):  return '%s/%s' % (self.__indexes_url(), urllib.quote(name))
+    def __index_url(self, name):  return '%s/%s' % (self.__indexes_url(), quote(name))
     
 class IndexClient(object):
     """
@@ -394,7 +394,7 @@ def _is_ok(status):
     return status / 100 == 2
 
 def _request(method, url, params={}, data={}, headers={}):
-    splits = urlparse.urlsplit(url)
+    splits = urlsplit(url)
     netloc = splits[1]
     if '@' in netloc:
         netloc_noauth = netloc.split('@')[1]
@@ -415,19 +415,19 @@ def _request(method, url, params={}, data={}, headers={}):
     else:
         port = 80
 
-    url = urlparse.urlunsplit((scheme, netloc_noauth, path, query, fragment))
+    url = urlunsplit((scheme, netloc_noauth, path, query, fragment))
     if method in ['GET', 'DELETE']:
-        params = urllib.urlencode(params, True)
+        params = urlencode(params, True)
         if params:
             if '?' not in url:
                 url += '?' + params
             else:
                 url += '&' + params
 
-    connection = httplib.HTTPConnection(netloc_noauth, port)
+    connection = HTTPConnection(netloc_noauth, port)
     if username or password:
         credentials = "%s:%s" % (username, password)
-        base64_credentials = base64.encodestring(credentials)
+        base64_credentials = base64.encodebytes(credentials)
         authorization = "Basic %s" % base64_credentials[:-1]
         headers['Authorization'] = authorization
 
