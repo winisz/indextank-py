@@ -449,13 +449,13 @@ def _request(method, url, params={}, data={}, headers={}):
                 response.body = anyjson.deserialize(response.body.decode())
             except ValueError as e:
                 raise InvalidResponseFromServer('The JSON response could not be parsed: %s.\n%s' % (e, response.body))
-            ret = response.status, response.body.decode()
+            ret = response.status, response.body
         else:
             ret = response.status, None
     elif response.status == 401:
         raise Unauthorized('Authorization required. Use your private api_url.')
     else:
-        raise HttpException(response.status, response.body.decode())
+        raise HttpException(response.status, response.body)
     connection.close()
     return ret
 
