@@ -6,7 +6,7 @@ setup(
     name = 'indextank',
     version = '1.0.6',
     description = 'IndexTank API Client for Python',
-    packages = find_packages(),
+    packages = ['indextank'],
     install_requires = ["anyjson"],
     classifiers = [
         'Intended Audience :: Developers',
