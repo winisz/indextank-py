@@ -2,6 +2,7 @@
 import anyjson
 import base64
 import datetime
+from functools import reduce
 from http.client import HTTPConnection
 from urllib.parse import urlparse, quote, urlsplit, urlunsplit
 
