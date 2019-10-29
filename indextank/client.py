@@ -428,7 +428,7 @@ def _request(method, url, params={}, data={}, headers={}):
     connection = HTTPConnection(netloc_noauth, port)
     if username or password:
         credentials = "%s:%s" % (username, password)
-        base64_credentials = base64.encodebytes(credentials)
+        base64_credentials = base64.encodebytes(credentials.encode())
         authorization = "Basic %s" % base64_credentials[:-1]
         headers['Authorization'] = authorization
 
