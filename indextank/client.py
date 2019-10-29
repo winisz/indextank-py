@@ -71,7 +71,7 @@ class IndexClient(object):
         try:
             self.refresh_metadata()
             return True
-        except HttpException, e:
+        except HttpException as e:
             if e.status == 404:
                 return False
             else:
@@ -126,7 +126,7 @@ class IndexClient(object):
                 raise IndexAlreadyExists('An index for the given name already exists')
             
             _request('PUT', self.__index_url, data=options)
-        except HttpException, e:
+        except HttpException as e:
             if e.status == 409:
                 raise TooManyIndexes(e.msg)
             raise e
@@ -145,7 +145,7 @@ class IndexClient(object):
 
             status, _ = _request('PUT', self.__index_url, data=options)
             self.refresh_metadata()
-        except HttpException, e:
+        except HttpException as e:
             raise e
         
     def delete_index(self):
@@ -225,7 +225,7 @@ class IndexClient(object):
     def add_function(self, function_index, definition):
         try:
             _request('PUT', self.__function_url(function_index), data={'definition': definition})
-        except HttpException, e:
+        except HttpException as e:
             if e.status == 400:
                 raise InvalidDefinition(e.msg)
     
@@ -293,7 +293,7 @@ class IndexClient(object):
         try:
             _, result = _request('GET', self.__search_url(), params=params)
             return result
-        except HttpException, e:
+        except HttpException as e:
             if e.status == 400:
                 raise InvalidQuery(e.msg)
             raise
@@ -345,7 +345,7 @@ class IndexClient(object):
         try:
             _, result = _request('DELETE', self.__search_url(), params=params)
             return result
-        except HttpException, e:
+        except HttpException as e:
             if e.status == 400:
                 raise InvalidQuery(e.msg)
             raise
@@ -446,7 +446,7 @@ def _request(method, url, params={}, data={}, headers={}):
         if response.body:
             try:
                 response.body = anyjson.deserialize(response.body)
-            except ValueError, e:
+            except ValueError as e:
                 raise InvalidResponseFromServer('The JSON response could not be parsed: %s.\n%s' % (e, response.body))
             ret = response.status, response.body
         else:
