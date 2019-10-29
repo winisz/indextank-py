@@ -1,13 +1,10 @@
 #!/usr/bin/env python
 
-from setuptools import setup, find_packages
-
-import os
-execfile(os.path.join('indextank', 'version.py'))
+from distutils.core import setup
 
 setup(
     name = 'indextank',
-    version = VERSION,
+    version = '1.0.6',
     description = 'IndexTank API Client for Python',
     packages = find_packages(),
     install_requires = ["anyjson"],
